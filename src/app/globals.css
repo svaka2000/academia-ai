@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
+/*
+  AcademiaAI design system
+  "Apple meets Linear" — calm, intelligent, organized, minimal.
+  Brand: Royal Blue #2563EB · Indigo #4338CA · Emerald #10B981
+*/
+
+@theme {
+  /* Brand */
+  --color-brand-50: #eff4ff;
+  --color-brand-100: #dbe6fe;
+  --color-brand-200: #bfd2fe;
+  --color-brand-300: #93b4fd;
+  --color-brand-400: #608dfa;
+  --color-brand-500: #3b6ef6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4fd8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+
+  --color-indigo-brand: #4338ca;
+  --color-emerald-brand: #10b981;
+  --color-emerald-soft: #ecfdf5;
+  --color-amber-brand: #d97706;
+  --color-rose-brand: #e11d48;
+
+  /* Semantic surfaces (light) */
+  --color-canvas: #ffffff;
+  --color-surface: #ffffff;
+  --color-subtle: #f8fafc;
+  --color-muted: #f1f5f9;
+  --color-line: #e9edf3;
+  --color-line-strong: #dde3ec;
+
+  /* Text */
+  --color-ink: #0f172a;
+  --color-ink-soft: #334155;
+  --color-ink-muted: #64748b;
+  --color-ink-faint: #94a3b8;
+
+  /* Fonts */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Radii — generous, rounded */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 30px;
+
+  /* Soft, layered shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px -4px rgba(15, 23, 42, 0.08),
+    0 2px 6px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 18px 40px -12px rgba(15, 23, 42, 0.14),
+    0 6px 14px -6px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 10px 34px -10px rgba(37, 99, 235, 0.35);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-canvas);
+  --foreground: var(--color-ink);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Base */
+* {
+  border-color: var(--color-line);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-brand-600) 18%, transparent);
+  color: var(--color-brand-800);
+}
+
+/* Focus ring — visible, brand-tinted */
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-brand-600) 60%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Thin, calm scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 999px;
+  border: 3px solid var(--color-canvas);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-faint);
+}
+
+/* Utilities */
+@utility text-balance {
+  text-wrap: balance;
+}
+
+.grid-fade {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--color-line-strong) 1px,
+    transparent 0
+  );
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 75%
+  );
+}
+
+.gradient-brand {
+  background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+}
+
+.gradient-brand-soft {
+  background: linear-gradient(135deg, #eff4ff 0%, #eef0ff 100%);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s var(--ease-out-soft) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

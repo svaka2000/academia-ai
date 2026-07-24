@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AcademiaAI
 
-## Getting Started
+**Know exactly what to study next.**
 
-First, run the development server:
+AcademiaAI is an AI homework planner that turns a pile of assignments into an
+organized daily study plan — so students stop deciding what to work on and just
+start making progress.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Built with Next.js 16, React 19, Tailwind v4, Zustand, Groq, and Stripe.
+
+---
+
+## Why it exists
+
+Students don't struggle because they're lazy. They struggle because school
+throws dozens of assignments, tests, and deadlines at them at once — and they
+spend more time deciding what to do than actually doing it.
+
+AcademiaAI removes the decision. Open the app, and there's one clear next step.
+
+## Features
+
+- **AI prioritization** — every assignment ranked by due date, difficulty, time, and importance.
+- **Homework breakdown** — big assignments become an ordered checklist ("essay" → research, outline, draft, revise, submit).
+- **Smart study planner** — work scheduled into your real study window, around commitments and sleep, with breaks built in.
+- **Focus mode** — one assignment at a time with a built-in timer.
+- **Assignment import** — paste from Google Classroom / Canvas and AI fills in the details.
+- **Progress dashboard** — streaks, hours focused, completion rate, upcoming deadlines.
+- **Free & Pro plans** — Stripe checkout, verified on return, with a customer portal.
+
+## Architecture
+
+Local-first and privacy-friendly by design:
+
+- **Data** lives in the browser (Zustand + `localStorage`). No account required, nothing on a server — it works instantly and offline.
+- **AI backend** (`/api/ai/*`) uses **Groq** when `GROQ_API_KEY` is set, and falls back to deterministic heuristics so breakdown/import work with **zero keys**.
+- **Billing** (`/api/stripe/*`) uses **Stripe** Checkout (inline price data — no pre-created products needed), verifies payment on return, and unlocks Pro. Without a key, "Upgrade" runs in demo mode.
+
+```
+src/
+  app/
+    page.tsx            # marketing landing page
+    app/                # the product (Today, Assignments, Planner, Focus, Progress, Settings)
+    api/ai/*            # breakdown + import (Groq → heuristic fallback)
+    api/stripe/*        # checkout, verify, portal, webhook
+  components/
+    ui/                 # design-system primitives
+    app/                # workspace components
+    marketing/          # landing components
+    brand/              # logo
+  lib/
+    store.ts            # Zustand persisted store
+    priority.ts         # the prioritization engine
+    planner.ts          # study-schedule builder
+    selectors.ts        # derived data + smart-nudge copy
+    ai/ · stripe/       # server + client helpers
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+cp .env.example .env.local   # optional — app runs fully without any keys
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+### Environment (all optional)
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Purpose |
+|---|---|
+| `GROQ_API_KEY` | Smarter AI breakdown & import ([console.groq.com/keys](https://console.groq.com/keys)) |
+| `GROQ_MODEL` | Model override (default `llama-3.3-70b-versatile`) |
+| `STRIPE_SECRET_KEY` | Real Pro checkout & billing portal |
+| `STRIPE_WEBHOOK_SECRET` | Webhook signature verification |
+| `NEXT_PUBLIC_SITE_URL` | OG tags + Stripe redirect URLs |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Deploys to **Vercel** as-is. Add the env vars above in the Vercel dashboard to
+activate AI and payments. The app is fully functional without any of them.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© AcademiaAI. All rights reserved.
