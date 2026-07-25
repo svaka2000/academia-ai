@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -58,18 +58,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-canvas text-ink antialiased">
         {children}
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              borderRadius: "14px",
-              border: "1px solid var(--color-line)",
-              boxShadow: "var(--shadow-lg)",
-              fontFamily: "var(--font-sans)",
-              color: "var(--color-ink)",
-            },
-          }}
-        />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );
