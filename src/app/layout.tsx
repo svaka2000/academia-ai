@@ -41,7 +41,6 @@ export const metadata: Metadata = {
     description:
       "Turn your assignments into an organized daily study plan with AI.",
   },
-  icons: { icon: "/icon.svg" },
 };
 
 export const viewport: Viewport = {
